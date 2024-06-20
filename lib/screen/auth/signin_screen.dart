@@ -1,10 +1,8 @@
-import 'dart:convert';
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
-import 'package:http/http.dart' as http;
-
 
 import 'package:flutter/material.dart';
 
@@ -34,8 +32,10 @@ class SignInState extends State<SignInScreen> {
       return;
     } 
     on FirebaseAuthException catch (e) {
+      log("파이어 베이스 로그인 에러 : $e");
       return;
     } catch (e) {
+      log("애플 로그인 에러 : $e");
       return;
     }
   }
@@ -65,8 +65,10 @@ class SignInState extends State<SignInScreen> {
         return;
       } 
       on FirebaseAuthException catch (e) {
+        log("파이어 베이스 로그인 에러 : $e");
         return;
       } catch (e) {
+        log("애플 로그인 에러 : $e");
         return;
       }
     }
@@ -98,24 +100,58 @@ class SignInState extends State<SignInScreen> {
               )
             ),
 
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "assets/images/auth/apple_signin.png",
-                  width : MediaQuery.of(context).size.width - 120,
-                  fit: BoxFit.fitWidth,
-                ),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
 
-                const SizedBox(height: 20,),
+                  Container(
+                    margin : const EdgeInsets.only(bottom : 10),
+                    child: Text(
+                      "SNS로 시작하기",
+                      style : TextStyle(
+                        color : Colors.grey,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600
+                      )
+                    ),
+                  ),
 
-                Image.asset(
-                  "assets/images/auth/google_signin.png",
-                  width : MediaQuery.of(context).size.width - 120,
-                  fit: BoxFit.fitWidth,
-                )
-              ],
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          signInApple(context);
+                        },
+                        child: Image.asset(
+                          "assets/images/auth/apple_signin.png",
+                          width : 42.sp,
+                          height : 42.sp,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                  
+                      SizedBox(width: 20.sp,),
+                  
+                      GestureDetector(
+                        onTap: () {
+                          signInGoogle(context);
+                        },
+                        child: Image.asset(
+                          "assets/images/auth/google_signin.png",
+                          width : 42.sp,
+                          height : 42.sp,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             )
           ],
         ),
