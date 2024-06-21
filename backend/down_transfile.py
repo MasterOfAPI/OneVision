@@ -1,3 +1,5 @@
+# 파파고 API 문서 다운로드
+
 import requests
 
 def download_translated_document(api_url, api_key_id, api_key, request_id, output_file_path):
