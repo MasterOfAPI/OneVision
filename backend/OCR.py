@@ -4,7 +4,7 @@ import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 import uuid
 
-def translate_document(api_url, api_key_id, api_key, file_path, source_lang='ja', target_lang='ko'):
+def translate_document(api_url, api_key_id, api_key, file_path, source_lang='en', target_lang='ko'):
     # Use a with statement to safely open and close the file
     with open(file_path, 'rb') as file:
         data = {
@@ -32,7 +32,7 @@ def translate_document(api_url, api_key_id, api_key, file_path, source_lang='ja'
 api_url = "https://naveropenapi.apigw.ntruss.com/doc-trans/v1/translate"
 api_key_id = "h9r6m27w0d"
 api_key = "7PbdD8RtQR0AyEwsp11tvqjazukN33AfAePbhuAa"
-file_path = '/Users/yoon/Downloads/backend/translated_document.pdf' # Setting
+file_path = '/Users/yoon/Downloads/backend/visa_document.pdf' # Check Your Path
 
 # Example usage
 try:
@@ -40,3 +40,4 @@ try:
     print(translated_text)
 except Exception as e:
     print(e)
+
