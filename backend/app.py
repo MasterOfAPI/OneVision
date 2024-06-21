@@ -19,7 +19,25 @@ def upload_file():
             return jsonify({'error': 'No selected file'}), 400
         file_path = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(file_path)
-        return jsonify({'message': f'File {file.filename} uploaded successfully'}), 200
+        return render_template_string("""
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Upload Complete</title>
+                <script type="text/javascript">
+                    function goBack() {
+                        window.location.href = "/upload";
+                    }
+                </script>
+            </head>
+            <body>
+                <h1>File {{ filename }} uploaded successfully</h1>
+                <button onclick="goBack()">Complete</button>
+            </body>
+            </html>
+        """, filename=file.filename)
     else:
         # Render the upload form
         html_content = """
@@ -61,7 +79,25 @@ def delete_file():
     file_path = os.path.join(UPLOAD_FOLDER, filename)
     if os.path.exists(file_path):
         os.remove(file_path)
-        return jsonify({'message': f'File {filename} deleted successfully'}), 200
+        return render_template_string("""
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Delete Complete</title>
+                <script type="text/javascript">
+                    function goBack() {
+                        window.location.href = "/upload";
+                    }
+                </script>
+            </head>
+            <body>
+                <h1>File {{ filename }} deleted successfully</h1>
+                <button onclick="goBack()">Complete</button>
+            </body>
+            </html>
+        """, filename=filename)
     else:
         return jsonify({'error': 'File not found'}), 404
 
