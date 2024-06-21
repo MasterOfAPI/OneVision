@@ -1,3 +1,5 @@
+# 파파고 API 번역 진행 상태 확인
+
 import requests
 
 def check_translation_status(api_url, api_key_id, api_key, request_id):
