@@ -2,7 +2,7 @@
 
 import pytesseract
 from PIL import Image
-from pdf2image import convert_from_path
+from pdf2image import convert_from_path # Install Only (myenv), Do not Local Setting
 
 # Define the path to the PDF
 pdf_path = '/Users/yoon/Downloads/backend/translated_document.pdf'
