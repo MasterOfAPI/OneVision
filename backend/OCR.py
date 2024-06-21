@@ -1,3 +1,5 @@
+# 파파고 API 문서번역
+
 import requests
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 import uuid
