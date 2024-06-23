@@ -47,7 +47,7 @@ def register_scan_destination(access_token, subject_id):
     data_param = {
         'alias_name': 'sample_alias_name',
         'type': 'url',
-        'destination': 'http://127.0.0.1:5000'
+        'destination': 'C:\OneVision\backend'
     }
     data = json.dumps(data_param)
     headers = {
