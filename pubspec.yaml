@@ -50,7 +50,8 @@ dependencies:
   qrscan: ^0.3.3
   mobile_scanner: ^5.1.1
   image_picker: ^1.1.2
-  intl: ^0.19.0
+  intl: ^0.18.1
+  file_picker: ^8.0.5
   
 
 dev_dependencies:

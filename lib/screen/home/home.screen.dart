@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:one_vision/model/ui/snackbar.ui.model.dart';
+import 'package:one_vision/screen/documents/documents_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -47,11 +51,20 @@ class HomeState extends State<HomeScreen> {
   }
 
   Future<void> onDocument() async {
-
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const DocumentsScreen())
+    );
   }
 
   Future<void> onPrint() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
+    if (result != null) {
+      File file = File(result.files.single.path!);
+    } else {
+      // User canceled the picker
+    }
   }
  
   @override
