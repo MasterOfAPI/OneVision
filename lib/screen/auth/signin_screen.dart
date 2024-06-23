@@ -1,10 +1,10 @@
-import 'dart:convert';
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:one_vision/model/ui/snackbar.ui.model.dart';
+import 'package:one_vision/screen/home/home.screen.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
-import 'package:http/http.dart' as http;
-
 
 import 'package:flutter/material.dart';
 
@@ -28,14 +28,30 @@ class SignInState extends State<SignInScreen> {
         accessToken: appleCredential.authorizationCode,
       );
 
-      var user = await FirebaseAuth.instance.signInWithCredential(oauthCrendential);
-      var token = await user.user?.getIdToken();
+      if (!mounted) {
+        return;  
+      }
+
+      try {
+        FirebaseAuth.instance.signInWithCredential(oauthCrendential);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen())
+        );
+      } catch (e) {
+        showSnackBar(context, "로그인 실패 잠시 후 다시 시도해주세요");
+      }
+
+
 
       return;
     } 
     on FirebaseAuthException catch (e) {
+      log("파이어 베이스 로그인 에러 : $e");
       return;
     } catch (e) {
+      log("애플 로그인 에러 : $e");
       return;
     }
   }
@@ -59,14 +75,24 @@ class SignInState extends State<SignInScreen> {
           idToken: googleAuth.idToken,
         );
 
-        var user = await FirebaseAuth.instance.signInWithCredential(credential);
-        var token = await user.user?.getIdToken();
+              try {
+        FirebaseAuth.instance.signInWithCredential(credential);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen())
+        );
+      } catch (e) {
+        showSnackBar(context, "로그인 실패 잠시 후 다시 시도해주세요");
+      }
         
         return;
       } 
       on FirebaseAuthException catch (e) {
+        log("파이어 베이스 로그인 에러 : $e");
         return;
       } catch (e) {
+        log("애플 로그인 에러 : $e");
         return;
       }
     }
@@ -75,7 +101,85 @@ class SignInState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      body : Container(
+        width: MediaQuery.of(context).size.width,
+        height : MediaQuery.of(context).size.height,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        decoration: const BoxDecoration(
+          color : Color(0xFFFFFFFF),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+
+            const SizedBox.shrink(),
+
+            const Text(
+              "원 비전",
+              style : TextStyle(
+                color : Color(0xFF000000),
+                fontSize: 20,
+                fontWeight: FontWeight.w700
+              )
+            ),
+
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+
+                  Container(
+                    margin : const EdgeInsets.only(bottom : 10),
+                    child: Text(
+                      "SNS로 시작하기",
+                      style : TextStyle(
+                        color : Colors.grey,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600
+                      )
+                    ),
+                  ),
+
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          signInApple(context);
+                        },
+                        child: Image.asset(
+                          "assets/images/auth/apple_signin.png",
+                          width : 42.sp,
+                          height : 42.sp,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      ),
+                  
+                      SizedBox(width: 20.sp,),
+                  
+                      GestureDetector(
+                        onTap: () {
+                          signInGoogle(context);
+                        },
+                        child: Image.asset(
+                          "assets/images/auth/google_signin.png",
+                          width : 42.sp,
+                          height : 42.sp,
+                          fit: BoxFit.fitWidth,
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }  
 }
