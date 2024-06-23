@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:one_vision/screen/auth/signin_screen.dart';
+import 'package:one_vision/screen/home/home.screen.dart';
 import 'firebase_options.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -36,6 +38,8 @@ class App extends StatefulWidget {
 
 class AppState extends State<App> {
   
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     super.initState();    
@@ -43,6 +47,9 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+
+
+
      return ScreenUtilInit(
         designSize: const Size(360, 800),
         minTextAdapt: true,
@@ -99,7 +106,7 @@ class AppState extends State<App> {
                   switch (settings.name) {
                   }
           
-                  return const SignInScreen();                
+                  return const HomeScreen();                
                 }
               );
             },

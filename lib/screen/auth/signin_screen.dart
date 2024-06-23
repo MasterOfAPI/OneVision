@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:one_vision/model/ui/snackbar.ui.model.dart';
+import 'package:one_vision/screen/home/home.screen.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 import 'package:flutter/material.dart';
@@ -26,8 +28,22 @@ class SignInState extends State<SignInScreen> {
         accessToken: appleCredential.authorizationCode,
       );
 
-      var user = await FirebaseAuth.instance.signInWithCredential(oauthCrendential);
-      var token = await user.user?.getIdToken();
+      if (!mounted) {
+        return;  
+      }
+
+      try {
+        FirebaseAuth.instance.signInWithCredential(oauthCrendential);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen())
+        );
+      } catch (e) {
+        showSnackBar(context, "로그인 실패 잠시 후 다시 시도해주세요");
+      }
+
+
 
       return;
     } 
@@ -59,8 +75,16 @@ class SignInState extends State<SignInScreen> {
           idToken: googleAuth.idToken,
         );
 
-        var user = await FirebaseAuth.instance.signInWithCredential(credential);
-        var token = await user.user?.getIdToken();
+              try {
+        FirebaseAuth.instance.signInWithCredential(credential);
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen())
+        );
+      } catch (e) {
+        showSnackBar(context, "로그인 실패 잠시 후 다시 시도해주세요");
+      }
         
         return;
       } 

@@ -47,6 +47,9 @@ dependencies:
   flutter_localization: ^0.2.0
   flutter_localizations:
     sdk: flutter
+  qrscan: ^0.3.3
+  mobile_scanner: ^5.1.1
+  image_picker: ^1.1.2
   
 
 dev_dependencies:
@@ -70,6 +73,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/auth/
+    - assets/images/home/
   fonts:            
 
     - family : NanumSquare
