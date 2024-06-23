@@ -3,7 +3,6 @@ from urllib import request, parse, error
 from http import HTTPStatus
 import base64
 import json
-from pprint import pprint
 
 HOST = 'api.epsonconnect.com'
 ACCEPT = 'application/json;charset=utf-8'
@@ -46,8 +45,8 @@ def register_scan_destination(access_token, subject_id):
     add_uri = f'https://{HOST}/api/1/scanning/scanners/{subject_id}/destinations'
     data_param = {
         'alias_name': 'sample_alias_name',
-        'type': 'url',
-        'destination': 'C:\OneVision\backend'
+        'type': 'mail',
+        'destination': 'musicstar9588@gmail.com'
     }
     data = json.dumps(data_param)
     headers = {
