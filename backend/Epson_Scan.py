@@ -44,7 +44,7 @@ def authenticate():
 def register_scan_destination(access_token, subject_id):
     add_uri = f'https://{HOST}/api/1/scanning/scanners/{subject_id}/destinations'
     data_param = {
-        'alias_name': 'sample_alias_name',
+        'alias_name': 'google_email',
         'type': 'mail',
         'destination': 'musicstar9588@gmail.com'
     }
