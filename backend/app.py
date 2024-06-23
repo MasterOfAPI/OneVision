@@ -1,10 +1,3 @@
-# 상세 정보
-# 라우트 /upload: 파일 업로드, 번역, 번역된 파일 다운로드, 텍스트 추출 수행
-# 라우트 /delete: 업로드된 파일 삭제
-# 라우트 /json: JSON 데이터 반환
-# 라우트 /html: HTML 페이지 반환
-# 라우트 /upload-form: 파일 업로드 용 폼
-
 import os
 import requests
 import uuid
