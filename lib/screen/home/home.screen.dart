@@ -1,14 +1,17 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:one_vision/keys.dart';
 import 'package:one_vision/model/ui/snackbar.ui.model.dart';
 import 'package:one_vision/screen/documents/documents_screen.dart';
+import 'package:http/http.dart' as http;
 
 
 class HomeScreen extends StatefulWidget {
@@ -20,6 +23,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeState extends State<HomeScreen> {
+
+  var user = FirebaseAuth.instance.currentUser;
   
   Future<void> onQRScan() async {
 
@@ -38,16 +43,42 @@ class HomeState extends State<HomeScreen> {
   }
 
   Future<void> onScan() async {
-    
+
     var picker = ImagePicker();
     var result = await picker.pickImage(source: ImageSource.camera);
 
-    if (result != null && mounted) {
-      showSnackBar(context, "파일 스캔 완료\n종류 : 전단지");
-    }
-    else if (mounted) {
+    if (result == null && mounted) {
       showSnackBar(context, "파일이 스캔되지 않았습니다");
     }
+
+    Dio dio = Dio(); 
+    String uri = '$SERVER/uc/newMission';    
+
+    String? token = await user?.getIdToken();
+    Map<String, String> headers = {"Authorization" : "Bearer $token"};
+    FormData body = FormData.fromMap(
+      {
+        "files" : await MultipartFile.fromFile(result!.path, filename: result.name)
+      },
+      ListFormat.multiCompatible,
+    );
+
+    try {
+      final response = await dio.post(
+        uri, 
+        data : body, 
+        options: Options(headers: headers), 
+      );
+      
+      if (response.statusCode == 200 && mounted) {    
+        showSnackBar(context, "");
+      }
+
+    } catch (error) {
+      //
+    }
+
+
   }
 
   Future<void> onDocument() async {

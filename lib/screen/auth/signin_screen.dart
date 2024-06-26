@@ -32,18 +32,12 @@ class SignInState extends State<SignInScreen> {
         return;  
       }
 
-      try {
-        FirebaseAuth.instance.signInWithCredential(oauthCrendential);
+      FirebaseAuth.instance.signInWithCredential(oauthCrendential);
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen())
-        );
-      } catch (e) {
-        showSnackBar(context, "로그인 실패 잠시 후 다시 시도해주세요");
-      }
-
-
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen())
+      );
 
       return;
     } 
@@ -75,16 +69,13 @@ class SignInState extends State<SignInScreen> {
           idToken: googleAuth.idToken,
         );
 
-              try {
         FirebaseAuth.instance.signInWithCredential(credential);
 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const HomeScreen())
         );
-      } catch (e) {
-        showSnackBar(context, "로그인 실패 잠시 후 다시 시도해주세요");
-      }
+
         
         return;
       } 
