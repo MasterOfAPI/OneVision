@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:one_vision/model/ui/snackbar.ui.model.dart';
 import 'package:one_vision/screen/home/home.screen.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -75,7 +74,6 @@ class SignInState extends State<SignInScreen> {
           context,
           MaterialPageRoute(builder: (context) => const HomeScreen())
         );
-
         
         return;
       } 

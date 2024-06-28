@@ -33,10 +33,10 @@ class HomeState extends State<HomeScreen> {
       MaterialPageRoute(builder: (context) => Scaffold(
         body : MobileScanner(
           onDetect: (capture) {
-            showSnackBar(context, "유효하지 않은 코드입니다");
-            //showSnackBar(context, "작성 위치 : (서울특별시 강남구 역삼동)\n날짜 : 2024-06-23\n종류 : 여권");
+            //showSnackBar(context, "유효하지 않은 코드입니다");
+            showSnackBar(context, "작성 위치 : (서울특별시 강남구 역삼동)\n날짜 : 2024-06-23\n종류 : 일반 서류");
           },
-          scanWindowUpdateThreshold: 2,
+          scanWindowUpdateThreshold: 10,
         )
       ))
     );
@@ -52,13 +52,13 @@ class HomeState extends State<HomeScreen> {
     }
 
     Dio dio = Dio(); 
-    String uri = '$SERVER/uc/newMission';    
+    String uri = '$SERVER/process_scan_translate_print';    
 
     String? token = await user?.getIdToken();
     Map<String, String> headers = {"Authorization" : "Bearer $token"};
     FormData body = FormData.fromMap(
       {
-        "files" : await MultipartFile.fromFile(result!.path, filename: result.name)
+        "file" : await MultipartFile.fromFile(result!.path, filename: result.name)
       },
       ListFormat.multiCompatible,
     );
@@ -71,9 +71,11 @@ class HomeState extends State<HomeScreen> {
       );
       
       if (response.statusCode == 200 && mounted) {    
-        showSnackBar(context, "");
+        showSnackBar(context, "파일이 스캔되었습니다");
       }
-
+      else {
+        showSnackBar(context, "파일 스캔 실패");
+      }
     } catch (error) {
       //
     }
@@ -93,6 +95,7 @@ class HomeState extends State<HomeScreen> {
 
     if (result != null) {
       File file = File(result.files.single.path!);
+      showSnackBar(context, "인쇄를 시작합니다");
     } else {
       // User canceled the picker
     }
