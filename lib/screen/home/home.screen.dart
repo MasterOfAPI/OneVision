@@ -49,10 +49,11 @@ class HomeState extends State<HomeScreen> {
 
     if (result == null && mounted) {
       showSnackBar(context, "파일이 스캔되지 않았습니다");
+      return;
     }
 
     Dio dio = Dio(); 
-    String uri = '$SERVER/process_scan_translate_print';    
+    String uri = '$SERVER/upload';    
 
     String? token = await user?.getIdToken();
     Map<String, String> headers = {"Authorization" : "Bearer $token"};
@@ -60,7 +61,9 @@ class HomeState extends State<HomeScreen> {
       {
         "file" : await MultipartFile.fromFile(result!.path, filename: result.name)
       },
+      
       ListFormat.multiCompatible,
+      
     );
 
     try {
@@ -69,6 +72,8 @@ class HomeState extends State<HomeScreen> {
         data : body, 
         options: Options(headers: headers), 
       );
+
+      print(response.statusCode);
       
       if (response.statusCode == 200 && mounted) {    
         showSnackBar(context, "파일이 스캔되었습니다");
@@ -77,7 +82,8 @@ class HomeState extends State<HomeScreen> {
         showSnackBar(context, "파일 스캔 실패");
       }
     } catch (error) {
-      //
+      showSnackBar(context, "파일 스캔 실패");
+      print(error);
     }
 
 
@@ -95,7 +101,42 @@ class HomeState extends State<HomeScreen> {
 
     if (result != null) {
       File file = File(result.files.single.path!);
-      showSnackBar(context, "인쇄를 시작합니다");
+
+      Dio dio = Dio(); 
+      String uri = '$SERVER/process_scan_translate_print';    
+      dio.options.headers["Content-Type"] = "multipart/form-data";
+      String? token = await user?.getIdToken();
+      Map<String, String> headers = {"Authorization" : "Bearer $token"};
+      FormData body = FormData.fromMap(
+        {
+          "file" : await MultipartFile.fromFile(file.path, filename: file.path.split("/").last)
+        },
+        
+        ListFormat.multiCompatible,
+      );
+
+      body.files.add(MapEntry("file", await MultipartFile.fromFile(file.path, filename: file.path.split("/").last)));
+
+
+      try {
+        final response = await dio.post(
+          uri, 
+          data : body, 
+          options: Options(headers: headers), 
+        );
+
+        print(response.statusCode);
+        
+        if (response.statusCode == 200 && mounted) {    
+          showSnackBar(context, "파일이 스캔되었습니다");
+        }
+        else {
+          showSnackBar(context, "파일 스캔 실패");
+        }
+      } catch (error) {
+        showSnackBar(context, "파일 스캔 실패");
+        print(error);
+      }
     } else {
       // User canceled the picker
     }

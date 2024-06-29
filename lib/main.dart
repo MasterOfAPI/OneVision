@@ -48,8 +48,6 @@ class AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
 
-
-
      return ScreenUtilInit(
         designSize: const Size(360, 800),
         minTextAdapt: true,
@@ -63,6 +61,7 @@ class AppState extends State<App> {
               unselectedWidgetColor: const Color(0xFFFFFFFF),
               bottomSheetTheme: const BottomSheetThemeData(
                 backgroundColor: Colors.transparent,
+                
                 surfaceTintColor: Colors.transparent,
                 shadowColor: Colors.transparent,
               ),
